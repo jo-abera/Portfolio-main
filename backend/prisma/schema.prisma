@@ -1,0 +1,193 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model SiteSettings {
+  id                      Int      @id @default(1) @db.SmallInt
+  site_title              String?
+  site_tagline            String?
+  hero_heading            String?
+  hero_subheading         String?
+  hero_intro              String?
+  hero_image_url          String?
+  hero_video_url          String?
+  about_heading           String?
+  about_description       String?
+  about_image_url         String?
+  about_philosophy        String?
+  about_learning_journey  String?
+  contact_email           String?
+  contact_phone           String?
+  contact_location        String?
+  resume_file_url         String?
+  seo_meta_description    String?
+  updated_at              DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@map("site_settings")
+}
+
+model SocialLink {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  platform       String
+  url            String
+  display_order  Int      @default(0)
+  is_active      Boolean  @default(true)
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@map("social_links")
+}
+
+model Service {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title          String
+  description    String?
+  icon           String?
+  image_url      String?
+  display_order  Int      @default(0)
+  is_active      Boolean  @default(true)
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([is_active, display_order])
+  @@map("services")
+}
+
+model Skill {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String
+  category       String
+  proficiency    Int?
+  icon           String?
+  display_order  Int      @default(0)
+  is_active      Boolean  @default(true)
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([is_active, display_order])
+  @@index([category])
+  @@map("skills")
+}
+
+model Experience {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  position       String
+  organization   String
+  start_date     DateTime  @db.Date
+  end_date       DateTime? @db.Date
+  description    String?
+  location       String?
+  display_order  Int       @default(0)
+  created_at     DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([display_order])
+  @@map("experiences")
+}
+
+model Education {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  degree         String
+  institution    String
+  start_date     DateTime  @db.Date
+  end_date       DateTime? @db.Date
+  description    String?
+  location       String?
+  display_order  Int       @default(0)
+  created_at     DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([display_order])
+  @@map("education")
+}
+
+model Project {
+  id                String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title             String
+  slug              String         @unique
+  short_description String?
+  full_description  String?
+  featured_image    String?
+  category          String?
+  technologies      String[]       @default([])
+  github_url        String?
+  live_url          String?
+  project_date      DateTime?      @db.Date
+  featured          Boolean        @default(false)
+  display_order     Int            @default(0)
+  is_published      Boolean        @default(false)
+  created_at        DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
+  images            ProjectImage[]
+
+  @@index([is_published, display_order])
+  @@index([slug])
+  @@map("projects")
+}
+
+model ProjectImage {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  project_id     String   @db.Uuid
+  image_url      String
+  caption        String?
+  display_order  Int      @default(0)
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  project        Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
+
+  @@index([project_id, display_order])
+  @@map("project_images")
+}
+
+model UpcomingProject {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title          String
+  description    String?
+  image_url      String?
+  technologies   String[] @default([])
+  status         String   @default("planning")
+  timeline       String?
+  progress       Int      @default(0)
+  is_published   Boolean  @default(false)
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([is_published])
+  @@map("upcoming_projects")
+}
+
+model Review {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  client_name    String
+  client_role    String?
+  company        String?
+  profile_image  String?
+  review_text    String
+  rating         Int
+  submitted_at   DateTime @default(now()) @db.Timestamptz(6)
+  is_approved    Boolean  @default(false)
+
+  @@index([is_approved, submitted_at(sort: Desc)])
+  @@map("reviews")
+}
+
+model ContactEnquiry {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String
+  email      String
+  phone      String?
+  company    String?
+  subject    String
+  message    String
+  status     String   @default("new")
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([status, created_at(sort: Desc)])
+  @@map("contact_enquiries")
+}
