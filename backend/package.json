@@ -5,6 +5,9 @@
   "type": "module",
   "description": "Express REST API + admin authorization layer for the portfolio. Prisma → PostgreSQL; Supabase → auth & storage.",
   "main": "src/server.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
@@ -24,9 +27,7 @@
     "express-rate-limit": "^7.4.0",
     "helmet": "^7.1.0",
     "multer": "^2.0.1",
+    "prisma": "^6.16.0",
     "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "prisma": "^6.16.0"
   }
 }
