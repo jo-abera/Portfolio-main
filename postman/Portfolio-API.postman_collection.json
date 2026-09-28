@@ -1,0 +1,186 @@
+{
+  "info": {
+    "name": "Portfolio API",
+    "description": "Express API for the portfolio project. Import with `Portfolio-Local.postman_environment.json`, set Supabase keys and admin password, run **Auth → Supabase login** first for admin routes.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Supabase login (save accessToken)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.access_token) {",
+                  "  pm.environment.set('accessToken', json.access_token);",
+                  "  pm.test('Saved accessToken', () => pm.expect(json.access_token).to.be.a('string'));",
+                  "} else {",
+                  "  pm.test('Login failed', () => pm.expect.fail(json.error_description || json.msg || 'No access_token'));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{supabaseAnonKey}}" },
+              { "key": "Authorization", "value": "Bearer {{supabaseAnonKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+            },
+            "url": "{{supabaseUrl}}/auth/v1/token?grant_type=password"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Public",
+      "auth": { "type": "noauth" },
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/health"
+          }
+        },
+        {
+          "name": "List services",
+          "request": { "method": "GET", "url": "{{apiUrl}}/services" }
+        },
+        {
+          "name": "List skills",
+          "request": { "method": "GET", "url": "{{apiUrl}}/skills" }
+        },
+        {
+          "name": "List projects",
+          "request": { "method": "GET", "url": "{{apiUrl}}/projects" }
+        },
+        {
+          "name": "Get project by slug",
+          "request": {
+            "method": "GET",
+            "url": "{{apiUrl}}/projects/my-project-slug"
+          }
+        },
+        {
+          "name": "List upcoming projects",
+          "request": { "method": "GET", "url": "{{apiUrl}}/upcoming-projects" }
+        },
+        {
+          "name": "List reviews (approved)",
+          "request": { "method": "GET", "url": "{{apiUrl}}/reviews" }
+        },
+        {
+          "name": "Site content",
+          "request": { "method": "GET", "url": "{{apiUrl}}/site-content" }
+        },
+        {
+          "name": "Resume — experiences",
+          "request": { "method": "GET", "url": "{{apiUrl}}/resume/experiences" }
+        },
+        {
+          "name": "Resume — education",
+          "request": { "method": "GET", "url": "{{apiUrl}}/resume/education" }
+        },
+        {
+          "name": "Submit enquiry",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"subject\": \"Postman test\",\n  \"message\": \"Hello from Postman\"\n}"
+            },
+            "url": "{{apiUrl}}/enquiries"
+          }
+        },
+        {
+          "name": "Submit review",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_name\": \"Jane Doe\",\n  \"review_text\": \"Great work!\",\n  \"rating\": 5\n}"
+            },
+            "url": "{{apiUrl}}/reviews"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Uses collection Bearer auth: {{accessToken}}. Run Auth → Supabase login first.",
+      "item": [
+        {
+          "name": "Me",
+          "request": { "method": "GET", "url": "{{apiUrl}}/admin/me" }
+        },
+        {
+          "name": "Dashboard stats",
+          "request": { "method": "GET", "url": "{{apiUrl}}/admin/dashboard" }
+        },
+        {
+          "name": "List services (admin)",
+          "request": { "method": "GET", "url": "{{apiUrl}}/admin/services" }
+        },
+        {
+          "name": "Create service",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Web Development\",\n  \"description\": \"Full-stack apps\",\n  \"display_order\": 0,\n  \"is_active\": true\n}"
+            },
+            "url": "{{apiUrl}}/admin/services"
+          }
+        },
+        {
+          "name": "List projects (admin)",
+          "request": { "method": "GET", "url": "{{apiUrl}}/admin/projects" }
+        },
+        {
+          "name": "List enquiries",
+          "request": { "method": "GET", "url": "{{apiUrl}}/admin/enquiries" }
+        },
+        {
+          "name": "List reviews (admin)",
+          "request": { "method": "GET", "url": "{{apiUrl}}/admin/reviews" }
+        },
+        {
+          "name": "Site content (admin)",
+          "request": { "method": "GET", "url": "{{apiUrl}}/admin/site-content" }
+        },
+        {
+          "name": "Upload file (profile-images)",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{ "key": "file", "type": "file", "src": [] }]
+            },
+            "url": "{{apiUrl}}/admin/upload/profile-images",
+            "description": "Buckets: profile-images, project-images, project-screenshots, service-images, review-images, resume, hero-video"
+          }
+        }
+      ]
+    }
+  ]
+}
