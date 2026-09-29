@@ -14,7 +14,8 @@ if (!process.env.ADMIN_EMAIL) missing.push('ADMIN_EMAIL');
 
 if (missing.length > 0) {
   throw new Error(
-    `Missing required environment variable(s): ${missing.join(', ')}. Copy .env.example to backend/.env and fill them in.`
+    `Missing required environment variable(s): ${missing.join(', ')}. ` +
+      'Local: copy .env.example to backend/.env. Render: add them under Environment → Secret Files / Env Vars, then redeploy.'
   );
 }
 

@@ -11,13 +11,14 @@ Host the Express API at `backend/`. Supabase stays as-is (same project as local 
    |-------|--------|
    | **Root directory** | `backend` **(recommended)** — or leave empty and use repo root `package.json` proxy |
    | **Runtime** | Node **20** (or 18+) |
-   | **Build command** | `npm install && npx prisma generate` |
+   | **Build command** | `npm install && npm run build` |
    | **Start command** | `npm start` |
+   | **Node version** | **20** (Settings → Environment → `NODE_VERSION=20` if needed) |
    | **Health check path** | `/health` |
 
    If **Root directory** is blank, Render uses the repo root: the root `package.json` runs `build` / `start` in `backend/`. Still set **all env vars** below on the service.
 
-3. **Environment variables** (copy values from local `backend/.env`; do not commit them):
+3. **Environment variables** — add these **before** the first deploy (copy from local `backend/.env`; do not commit them). Without them the **deploy** step fails even if the build succeeds:
 
    | Key | Notes |
    |-----|--------|

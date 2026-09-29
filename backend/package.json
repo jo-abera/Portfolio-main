@@ -6,12 +6,13 @@
   "description": "Express REST API + admin authorization layer for the portfolio. Prisma → PostgreSQL; Supabase → auth & storage.",
   "main": "src/server.js",
   "engines": {
-    "node": ">=18"
+    "node": "20.x"
   },
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
-    "postinstall": "prisma generate",
+    "build": "node scripts/ensure-prisma-generate.js",
+    "postinstall": "node scripts/ensure-prisma-generate.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:studio": "prisma studio",
