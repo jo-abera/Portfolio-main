@@ -23,7 +23,10 @@ export const env = {
   port: Number(process.env.PORT) || 4000,
   // Comma-separated list so multiple local dev servers (e.g. Vite falling
   // back to 5174 when 5173 is taken) can all reach the API at once.
-  corsOrigin: (process.env.CORS_ORIGIN || 'http://localhost:5173').split(',').map((s) => s.trim()),
+  corsOrigin: (process.env.CORS_ORIGIN || 'http://localhost:5173')
+    .split(',')
+    .map((s) => s.trim().replace(/\/+$/, ''))
+    .filter(Boolean),
   supabaseUrl: process.env.SUPABASE_URL,
   supabaseServiceRoleKey,
   adminEmail: process.env.ADMIN_EMAIL.toLowerCase(),
