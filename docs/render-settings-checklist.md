@@ -45,7 +45,7 @@ ADMIN_EMAIL
 CORS_ORIGIN
 ```
 
-Optional: `NODE_VERSION` = `20`
+Recommended: `NODE_VERSION` = `22` (Supabase JS expects WebSocket; backend polyfills with `ws` on Node 20 too)
 
 `CORS_ORIGIN` example: `https://your-frontend.vercel.app` (no trailing slash)
 
