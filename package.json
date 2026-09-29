@@ -1,0 +1,9 @@
+{
+  "name": "portfolio-monorepo",
+  "private": true,
+  "description": "Root package for hosts (e.g. Render) that deploy from repo root. Prefer Root Directory = backend.",
+  "scripts": {
+    "build": "npm install --prefix backend && npm run db:generate --prefix backend",
+    "start": "npm start --prefix backend"
+  }
+}
