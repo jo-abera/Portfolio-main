@@ -22,7 +22,7 @@ export default function About() {
         </motion.div>
 
         <div className="space-y-8">
-          <p className="text-lg leading-relaxed text-ink/70">
+          <p className="text-justify text-lg leading-relaxed text-ink/70">
             {content?.about_description || 'Add a description of yourself from the admin panel.'}
           </p>
 
@@ -31,14 +31,14 @@ export default function About() {
               <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
                 <Compass className="mb-3 h-5 w-5 text-primary-400" />
                 <h3 className="mb-2 font-semibold text-ink">Development Philosophy</h3>
-                <p className="text-sm text-ink/60">{content.about_philosophy}</p>
+                <p className="text-justify text-sm leading-relaxed text-ink/60">{content.about_philosophy}</p>
               </div>
             )}
             {content?.about_learning_journey && (
               <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
                 <Sprout className="mb-3 h-5 w-5 text-primary-400" />
                 <h3 className="mb-2 font-semibold text-ink">Learning Journey</h3>
-                <p className="text-sm text-ink/60">{content.about_learning_journey}</p>
+                <p className="text-justify text-sm leading-relaxed text-ink/60">{content.about_learning_journey}</p>
               </div>
             )}
           </div>
