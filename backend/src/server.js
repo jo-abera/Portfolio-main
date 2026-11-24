@@ -19,7 +19,7 @@ app.set('trust proxy', 1);
 app.use(helmet());
 
 // ── CORS ──
-// Support multiple origins (dev + prod) comma-separated
+// Allowed origins from CORS_ORIGIN (comma-separated). Restart backend after changing .env.
 const allowedOrigins = env.corsOrigin?.length ? env.corsOrigin : true;
 
 app.use(
